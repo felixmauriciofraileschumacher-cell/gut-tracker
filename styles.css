@@ -183,7 +183,9 @@ button {
 }
 
 .gt-day-nav__title--current {
-  border-bottom: 2px solid var(--gut-fg-1);
+  border: 2px solid var(--gut-fg-1);
+  border-radius: 999px;
+  padding: 0 20px;
 }
 
 .gt-day-nav__btn {
