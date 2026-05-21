@@ -4,11 +4,11 @@
 :root {
   /* Color tokens (from Figma) */
   --gut-fg-1: #f2f2f2;
-  --gut-fg-2: #93a39e;
+  --gut-fg-2: #95a6a0;
   --gut-divider: rgba(255, 255, 255, 0.2);
   --gut-surface: rgba(255, 255, 255, 0.1);
-  --gut-surface-alt: #4e6662;
-  --gut-bg-1: #2f3d3b;
+  --gut-surface-alt: #3d6658;
+  --gut-bg-1: #1a332b;
 
   /* Typography */
   --gut-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
