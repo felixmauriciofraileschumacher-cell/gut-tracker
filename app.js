@@ -765,7 +765,7 @@ function renderMonthDay(cell) {
 
 /* ---------- View: Log screen ------------------------------------------ */
 const DISCOMFORT_LEVELS = [
-  { value: "none", label: "None", muted: true },
+  { value: "none", label: "None" },
   { value: "low", label: "Low" },
   { value: "med", label: "Med" },
   { value: "high", label: "High" },
