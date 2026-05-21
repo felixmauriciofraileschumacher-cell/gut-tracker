@@ -282,6 +282,62 @@ function openDayViewAtDate(date) {
   renderBaseView();
 }
 
+/* --- Export screen navigation --- */
+function openExportScreen() {
+  if (state.overlay === "export") return;
+  state.overlay = "export";
+  renderBaseView();
+  showSheet("screen--export", renderExportScreen);
+}
+
+function closeExportScreen() {
+  if (state.overlay !== "export") return;
+  state.overlay = null;
+  hideSheet("screen--export");
+}
+
+function confirmExport() {
+  const entries = loadEntries();
+  if (entries.length === 0) {
+    alert("No activity logged yet — nothing to export.");
+    return;
+  }
+  const csv = entriesToCsv(entries);
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const filename = "ventri-nota-" + ymd(new Date()) + ".csv";
+  const a = el("a", { href: url, download: filename });
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  // Revoke after a tick so the browser has time to start the download.
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  closeExportScreen();
+}
+
+/* Build a RFC-4180-compliant CSV from the entries array. */
+function entriesToCsv(entries) {
+  const headers = ["id", "date", "time", "type", "bristolType", "amount", "discomfort", "remarks"];
+  const sorted = entries.slice().sort((a, b) => {
+    if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+    return a.time < b.time ? -1 : 1;
+  });
+  const rows = [headers.join(",")];
+  for (const e of sorted) {
+    rows.push(headers.map((h) => csvField(e[h])).join(","));
+  }
+  return rows.join("\r\n") + "\r\n";
+}
+
+function csvField(value) {
+  if (value == null) return "";
+  const str = String(value);
+  // Quote fields that contain commas, quotes, or newlines; escape any
+  // double quotes inside by doubling them up.
+  if (/[",\r\n]/.test(str)) return '"' + str.replace(/"/g, '""') + '"';
+  return str;
+}
+
 function goToMonth(delta) {
   const d = new Date(state.currentDate);
   d.setDate(1); // avoid month overflow with day numbers > 28
@@ -326,6 +382,7 @@ function renderApp() {
   renderBaseView();
   if (state.overlay === "log" && state.draft) showSheet("screen--log", renderLogScreen);
   else if (state.overlay === "details" && state.viewingId != null) showSheet("screen--details", renderDetailsScreen);
+  else if (state.overlay === "export") showSheet("screen--export", renderExportScreen);
 }
 
 function renderBaseView() {
@@ -412,14 +469,14 @@ function renderHeader() {
 }
 
 function renderHeaderSide() {
-  return el("div", { class: "gt-header__side" }, [
-    el("button", { class: "gt-icon-btn", type: "button", "aria-label": "Filter" }, [
-      icon("filter_list", "icon-32"),
-    ]),
-    el("button", { class: "gt-icon-btn", type: "button", "aria-label": "Export" }, [
-      icon("drive_folder_upload", "icon-32"),
-    ]),
+  const filterBtn = el("button", { class: "gt-icon-btn", type: "button", "aria-label": "Filter" }, [
+    icon("filter_list", "icon-32"),
   ]);
+  const exportBtn = el("button", { class: "gt-icon-btn", type: "button", "aria-label": "Export" }, [
+    icon("drive_folder_upload", "icon-32"),
+  ]);
+  exportBtn.addEventListener("click", openExportScreen);
+  return el("div", { class: "gt-header__side" }, [filterBtn, exportBtn]);
 }
 
 function renderDayNav() {
@@ -1030,6 +1087,56 @@ function amountLabel(v) {
   return { low: "Low", med: "Medium", high: "High" }[v] || v;
 }
 
+/* ---------- View: Export confirmation --------------------------------- */
+function renderExportScreen() {
+  const screen = el("div", { class: "screen screen--export" });
+  screen.append(renderExportHeader(), renderExportBody(), renderExportFooter());
+  return screen;
+}
+
+function renderExportHeader() {
+  const closeBtn = el("button", { class: "gt-icon-btn", type: "button", "aria-label": "Close" },
+    [icon("close", "icon-32")]);
+  closeBtn.addEventListener("click", closeExportScreen);
+  return el("header", { class: "gt-export-header" }, [
+    el("p", { class: "gt-export-header__title" }, "Export"),
+    closeBtn,
+  ]);
+}
+
+function renderExportBody() {
+  const body = el("div", { class: "gt-export-body" });
+
+  const iconEl = el("span", {
+    class: "material-symbols-outlined gt-export-icon",
+    "aria-hidden": "true",
+  }, "download");
+  body.appendChild(iconEl);
+
+  const content = el("div", { class: "gt-export-content" });
+  content.appendChild(el("p", { class: "gt-export-title" }, "Download .CSV file"));
+
+  // Subtitle has two highlighted phrases ("Microsoft Excel" and "Google
+  // sheets") rendered brighter than the rest of the sentence.
+  const sub = el("p", { class: "gt-export-subtitle" });
+  sub.appendChild(document.createTextNode("You can open this file with "));
+  sub.appendChild(el("strong", null, "Microsoft Excel"));
+  sub.appendChild(document.createTextNode(" or "));
+  sub.appendChild(el("strong", null, "Google sheets"));
+  sub.appendChild(document.createTextNode(" and export it to PDF."));
+  content.appendChild(sub);
+
+  body.appendChild(content);
+  return body;
+}
+
+function renderExportFooter() {
+  const btn = el("button", { class: "gt-primary-btn", type: "button" },
+    el("span", null, "Download"));
+  btn.addEventListener("click", confirmExport);
+  return el("footer", { class: "gt-log-footer" }, [btn]);
+}
+
 /* ---------- Bucketing -------------------------------------------------- */
 function bucketEntries(entries) {
   // hours[0..23] = [slot0, slot1, slot2, slot3] of activity arrays
@@ -1134,6 +1241,8 @@ document.addEventListener("DOMContentLoaded", () => {
       state.viewingId = entry.id;
       state.overlay = "details";
     }
+  } else if (qs.get("export") === "1") {
+    state.overlay = "export";
   }
   renderApp();
   // Land on the current hour ONLY at boot (page open / refresh) and only

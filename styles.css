@@ -341,11 +341,12 @@ button {
    Log screen (activity logging)
    ========================================================================= */
 
-/* Overlay sheets — the Log screen and the Activity Details screen both
-   slide up from the bottom over the Day Time Grid. position:fixed inside
-   the centered #app, so they track the app's max-width on desktop. */
+/* Overlay sheets — Log, Activity Details, and Export all slide up from
+   the bottom over the base view. position:fixed inside the centered #app,
+   so they track the app's max-width on desktop. */
 .screen--log,
-.screen--details {
+.screen--details,
+.screen--export {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -366,7 +367,9 @@ button {
 .screen--log.is-entering,
 .screen--log.is-exiting,
 .screen--details.is-entering,
-.screen--details.is-exiting {
+.screen--details.is-exiting,
+.screen--export.is-entering,
+.screen--export.is-exiting {
   transform: translate(-50%, 100%);
 }
 
@@ -948,4 +951,80 @@ input[type="time"].gt-input::-webkit-calendar-picker-indicator {
 .gt-fab:active,
 .gt-primary-btn:active {
   filter: brightness(0.88);
+}
+
+/* =========================================================================
+   Export confirmation sheet
+   ========================================================================= */
+
+/* Asymmetric header — "Export" title on the left, close icon button
+   on the right. Differs from Log/Details headers which have icon
+   buttons on both sides. */
+.gt-export-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 8px 12px 16px;
+  background: var(--gut-bg-1);
+}
+
+.gt-export-header__title {
+  margin: 0;
+  font-family: var(--gut-mono);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--gut-fg-1);
+}
+
+.gt-export-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.gt-export-icon {
+  font-size: 48px;
+  color: var(--gut-fg-1);
+  font-variation-settings: "opsz" 48, "wght" 300, "FILL" 0, "GRAD" 0;
+}
+
+.gt-export-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.gt-export-title {
+  margin: 0;
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 1.2;
+  color: var(--gut-fg-1);
+}
+
+.gt-export-subtitle {
+  margin: 0;
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.4;
+  color: var(--gut-fg-2);
+}
+
+/* Inline highlights ("Microsoft Excel", "Google sheets") use the
+   brighter fg colour while keeping the same weight as surrounding text. */
+.gt-export-subtitle strong {
+  color: var(--gut-fg-1);
+  font-weight: 400;
 }
