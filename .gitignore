@@ -1,0 +1,14 @@
+# macOS Finder metadata
+.DS_Store
+
+# Local dev tooling — Claude Code preview server config has machine paths
+.claude/
+
+# Editor leftovers (just in case)
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Throwaway dev harness files (cleaned up but ignored to be safe)
+_*.html

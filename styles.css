@@ -1,0 +1,951 @@
+/* =========================================================================
+   Gut Tracker — design tokens & base
+   ========================================================================= */
+:root {
+  /* Color tokens (from Figma) */
+  --gut-fg-1: #f0f0f0;
+  --gut-fg-2: #93a39e;
+  --gut-divider: rgba(255, 255, 255, 0.2);
+  --gut-surface: rgba(255, 255, 255, 0.1);
+  --gut-surface-alt: #47665c;
+  --gut-bg-1: #21332d;
+  --gut-disabled: #2d4039;
+
+  /* Typography */
+  --gut-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --gut-mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Layout primitives */
+  --gut-screen-w: 480px; /* Cap on desktop; phones fill 100% (see #app) */
+  --gut-header-h: 72px;
+  --gut-day-nav-h: 56px;
+  --gut-grid-top: 144px;
+  --gut-fab-h: 56px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--gut-bg-1);
+  color: var(--gut-fg-1);
+  font-family: var(--gut-sans);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+/* Clip horizontal overflow at the viewport edge so the day/month
+   slide-in (which translates .screen-body off to the side) doesn't
+   trigger a horizontal scrollbar. Applied to html only — when set on
+   the root element, the overflow value propagates to the viewport and
+   leaves both <html> and <body> as visible-overflow themselves, so
+   sticky chrome inside .screen continues to bind to the viewport. */
+html { overflow-x: hidden; }
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Material Symbols base — global default per design system: 32px / weight 300 */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 32px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings:
+    "opsz" 40,
+    "wght" 300,
+    "FILL" 0,
+    "GRAD" 0;
+  color: var(--gut-fg-1);
+  user-select: none;
+}
+
+/* Icon size variants */
+.icon-20 { font-size: 20px; font-variation-settings: "opsz" 20, "wght" 300, "FILL" 0, "GRAD" 0; }
+.icon-24 { font-size: 24px; font-variation-settings: "opsz" 24, "wght" 300, "FILL" 0, "GRAD" 0; }
+.icon-32 { font-size: 32px; font-variation-settings: "opsz" 40, "wght" 300, "FILL" 0, "GRAD" 0; }
+.icon-w200 { font-variation-settings: "opsz" 24, "wght" 200, "FILL" 0, "GRAD" 0; }
+
+/* =========================================================================
+   App shell
+   ========================================================================= */
+#app {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  margin: 0 auto;
+  max-width: var(--gut-screen-w);
+  background: var(--gut-bg-1);
+}
+
+.screen--day {
+  display: block;
+}
+
+/* =========================================================================
+   Header (day-time-grid)
+   ========================================================================= */
+.gt-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--gut-header-h);
+  padding: 12px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--gut-bg-1);
+}
+
+.gt-day-month-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 8px;
+  border-radius: 8px;
+}
+
+.gt-day-month-toggle__label {
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--gut-fg-1);
+}
+
+.gt-header__side {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gt-icon-btn {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.gt-icon-btn:active { background: var(--gut-surface); }
+
+/* =========================================================================
+   Day navigation
+   ========================================================================= */
+.gt-day-nav {
+  position: sticky;
+  top: var(--gut-header-h);
+  z-index: 19;
+  height: var(--gut-day-nav-h);
+  background: var(--gut-bg-1);
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gt-day-nav__title {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 20px;
+  color: var(--gut-fg-1);
+}
+
+.gt-day-nav__title--current {
+  border-bottom: 2px solid var(--gut-fg-1);
+}
+
+.gt-day-nav__btn {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.gt-day-nav__btn--prev .material-symbols-outlined {
+  transform: rotate(180deg);
+}
+
+/* =========================================================================
+   Time grid
+   ========================================================================= */
+.gt-time-grid {
+  padding: 16px 16px calc(var(--gut-fab-h) + 48px);
+  display: flex;
+  flex-direction: column;
+}
+
+.gt-hour {
+  display: flex;
+  flex-direction: column;
+}
+
+.gt-hour__row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 14px;
+  margin-bottom: 4px;
+}
+
+.gt-hour__label {
+  font-family: var(--gut-mono);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--gut-fg-2);
+  width: 42px;
+  text-align: center;
+  flex: 0 0 42px;
+  white-space: nowrap;
+}
+
+.gt-hour__divider {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 1px;
+  background: var(--gut-divider);
+}
+
+.gt-hour__slots {
+  padding-left: 58px;
+  padding-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gt-slot {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+}
+
+/* Empty slots are rendered as buttons (see app.js). Match the activity
+   pill radius so the hover tint reads as "this is where a pill would go". */
+.gt-slot--empty {
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.gt-activity {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 24px;
+  padding: 0 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--gut-fg-1);
+  color: var(--gut-bg-1);
+  border-radius: 4px;
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.gt-activity__icon {
+  font-size: 20px;
+  flex: 0 0 20px;
+  color: var(--gut-bg-1);
+  font-variation-settings: "opsz" 20, "wght" 300, "FILL" 0, "GRAD" 0;
+}
+
+.gt-activity__label {
+  flex: 1 1 0;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gt-activity--placeholder { visibility: hidden; }
+
+/* The final terminator (24:00 / next-day) — no slots */
+.gt-hour--terminator .gt-hour__slots { display: none; }
+
+/* "Now band" — the current hour and the next one are brightened.
+   Only applied when viewing today (see renderTimeGrid). */
+.gt-hour--now .gt-hour__label { color: var(--gut-fg-1); }
+.gt-hour--now .gt-hour__divider { background: var(--gut-fg-2); }
+
+/* =========================================================================
+   Floating Add button (FAB)
+   ========================================================================= */
+.gt-fab {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  height: var(--gut-fab-h);
+  padding: 0 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--gut-fg-1);
+  color: var(--gut-bg-1);
+  border: 1px solid var(--gut-divider);
+  border-radius: 999px;
+  font-family: var(--gut-mono);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 30;
+}
+
+.gt-fab__icon {
+  font-size: 32px;
+  color: var(--gut-bg-1);
+  font-variation-settings: "opsz" 24, "wght" 300, "FILL" 0, "GRAD" 0;
+}
+
+.gt-fab:active { transform: translate(-50%, 1px); }
+
+/* =========================================================================
+   Log screen (activity logging)
+   ========================================================================= */
+
+/* Overlay sheets — the Log screen and the Activity Details screen both
+   slide up from the bottom over the Day Time Grid. position:fixed inside
+   the centered #app, so they track the app's max-width on desktop. */
+.screen--log,
+.screen--details {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  max-width: var(--gut-screen-w);
+  background: var(--gut-bg-1);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateX(-50%);
+  transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Enter/exit states: combine horizontal centering with vertical offset. */
+.screen--log.is-entering,
+.screen--log.is-exiting,
+.screen--details.is-entering,
+.screen--details.is-exiting {
+  transform: translate(-50%, 100%);
+}
+
+/* Lock body scroll behind the sheet while it's open. */
+body.sheet-open { overflow: hidden; }
+
+.gt-log-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 8px;
+  background: var(--gut-bg-1);
+}
+
+.gt-log-form {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 16px 16px 32px;
+  width: 100%;
+  /* The header and footer are sticky-equivalent (the sheet is the
+     container); only the form scrolls inside it. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gt-log-footer {
+  flex: 0 0 auto;
+  padding: 16px;
+  background: var(--gut-bg-1);
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Field — label + control */
+.gt-field {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.gt-field--remarks {
+  gap: 12px;
+  align-items: stretch;
+}
+
+.gt-field__label {
+  font-family: var(--gut-mono);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--gut-fg-2);
+  text-align: center;
+  margin: 0;
+  width: 100%;
+}
+
+.gt-field--remarks .gt-field__label { text-align: left; }
+
+/* Choice row (activity type, amount, discomfort) */
+.gt-choice-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.gt-choice {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 56px;
+  border: 1px solid var(--gut-divider);
+  background: transparent;
+  color: var(--gut-fg-1);
+  border-radius: 8px;
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 8px;
+  cursor: pointer;
+}
+
+.gt-choice--activity .material-symbols-outlined {
+  font-size: 32px;
+  color: var(--gut-fg-1);
+  font-variation-settings: "opsz" 40, "wght" 300, "FILL" 0, "GRAD" 0;
+}
+
+.gt-choice--muted { color: var(--gut-fg-2); }
+
+.gt-choice[aria-pressed="true"] {
+  border-width: 2px;
+  border-color: var(--gut-fg-1);
+  color: var(--gut-fg-1);
+}
+
+.gt-choice[aria-pressed="true"].gt-choice--muted { color: var(--gut-fg-1); }
+
+.gt-choice:active { background: var(--gut-surface); }
+
+/* Bristol scale: 7-column grid with indicator row spanning 2/2/3 cols */
+.gt-bristol {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  column-gap: 4px;
+  row-gap: 12px;
+  width: 100%;
+}
+
+.gt-bristol-ind {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--gut-divider);
+  font-family: var(--gut-mono);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--gut-fg-2);
+  text-align: center;
+}
+
+.gt-bristol-ind--active {
+  border-bottom-width: 2px;
+  border-bottom-color: var(--gut-fg-1);
+  color: var(--gut-fg-1);
+}
+
+.gt-bristol-ind--lumpy  { grid-column: 1 / 3; }
+.gt-bristol-ind--normal { grid-column: 3 / 5; }
+.gt-bristol-ind--liquid { grid-column: 5 / 8; }
+
+.gt-bristol-num {
+  height: 56px;
+  border: 1px solid var(--gut-divider);
+  background: transparent;
+  color: var(--gut-fg-1);
+  border-radius: 8px;
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.gt-bristol-num[aria-pressed="true"] {
+  border-width: 2px;
+  border-color: var(--gut-fg-1);
+}
+
+.gt-bristol-num:active { background: var(--gut-surface); }
+
+/* Native date / time input */
+.gt-input {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 56px;
+  border: 1px solid var(--gut-divider);
+  background: transparent;
+  color: var(--gut-fg-1);
+  border-radius: 8px;
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 20px;
+  text-align: center;
+  padding: 0 16px;
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  font-variant-numeric: tabular-nums;
+  color-scheme: dark;
+}
+
+.gt-input:focus {
+  outline: none;
+  border-width: 2px;
+  border-color: var(--gut-fg-1);
+}
+
+.gt-input::-webkit-date-and-time-value { text-align: center; }
+
+/* Recolor the native calendar / clock picker icon to ~--gut-fg-1.
+   brightness(0) flattens the source to pure black regardless of how
+   Chrome shipped it (light on dark color-scheme, black on light, etc),
+   then invert(1) flips to white. Deterministic across themes. */
+.gt-input::-webkit-calendar-picker-indicator,
+input[type="date"].gt-input::-webkit-calendar-picker-indicator,
+input[type="time"].gt-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 1;
+  filter: brightness(0) invert(1);
+  -webkit-filter: brightness(0) invert(1);
+}
+
+/* Textarea */
+.gt-textarea {
+  width: 100%;
+  height: 86px;
+  min-height: 86px;
+  border: 1px solid var(--gut-divider);
+  background: transparent;
+  color: var(--gut-fg-1);
+  border-radius: 8px;
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.5;
+  padding: 12px 16px;
+  resize: vertical;
+}
+
+.gt-textarea::placeholder { color: var(--gut-fg-2); }
+
+.gt-textarea:focus {
+  outline: none;
+  border-width: 2px;
+  border-color: var(--gut-fg-1);
+}
+
+/* Primary button (footer save) */
+.gt-primary-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 56px;
+  background: var(--gut-fg-1);
+  color: var(--gut-bg-1);
+  border: 1px solid var(--gut-divider);
+  border-radius: 999px;
+  font-family: var(--gut-mono);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gt-primary-btn .material-symbols-outlined {
+  font-size: 32px;
+  color: var(--gut-bg-1);
+  font-variation-settings: "opsz" 40, "wght" 300, "FILL" 0, "GRAD" 0;
+}
+
+.gt-primary-btn:active { transform: translateY(1px); }
+
+/* =========================================================================
+   Activity Details body
+   ========================================================================= */
+.gt-det-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px 16px 32px;
+  width: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.gt-det-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.gt-det-row--start { align-items: flex-start; }
+
+.gt-det-leading-wrap {
+  flex: 0 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.gt-det-leading {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  color: var(--gut-fg-1);
+}
+
+.gt-det-leading.material-symbols-outlined {
+  font-size: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-variation-settings: "opsz" 40, "wght" 300, "FILL" 0, "GRAD" 0;
+}
+
+.gt-det-thumbnail {
+  border-radius: 8px;
+  background: var(--gut-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--gut-fg-1);
+}
+
+.gt-det-content {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.gt-det-label {
+  margin: 0;
+  font-family: var(--gut-mono);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.2;
+  color: var(--gut-fg-2);
+}
+
+.gt-det-value {
+  margin: 0;
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.4;
+  color: var(--gut-fg-1);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.gt-det-row--start .gt-det-value {
+  display: block; /* Allow long remarks to wrap naturally. */
+}
+
+.gt-det-dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--gut-fg-1);
+  margin: 0 8px;
+  vertical-align: middle;
+}
+
+/* Make activity pills look identical as <button>s — neutralise the
+   browser default cursor and remove any text-align quirks. */
+.gt-activity {
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.gt-activity--placeholder { cursor: default; }
+
+/* =========================================================================
+   Month view
+   ========================================================================= */
+.screen--month {
+  display: block;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.gt-month-nav {
+  height: var(--gut-day-nav-h);
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--gut-bg-1);
+}
+
+.gt-month-nav__pill {
+  height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--gut-sans);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--gut-fg-1);
+}
+
+.gt-day-nav__btn[disabled] {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.gt-month-grid {
+  padding: 16px 8px calc(var(--gut-fab-h) + 48px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gt-month-weekdays {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+
+.gt-month-weekday {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 2px;
+  text-align: center;
+  font-family: var(--gut-mono);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.2;
+  color: var(--gut-fg-2);
+}
+
+.gt-month-weeks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gt-month-week {
+  display: flex;
+  gap: 4px;
+  align-items: stretch;
+}
+
+.gt-month-day {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 64px;
+  padding: 16px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  background: transparent;
+  border: 2px solid transparent; /* reserve space; current-day fills it */
+  border-radius: 8px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.gt-month-day--current { border-color: var(--gut-fg-1); }
+
+.gt-month-day__num {
+  font-family: var(--gut-mono);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--gut-fg-1);
+}
+
+.gt-month-day__num--muted { color: var(--gut-fg-2); }
+
+/* Activity marking — 1, 2 or 3 overlapping 12px dots. */
+.gt-month-marking {
+  display: inline-flex;
+  align-items: center;
+  height: 12px;
+  isolation: isolate;
+}
+
+.gt-month-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid var(--gut-bg-1);
+  display: inline-block;
+}
+
+/* Colors per dot index (left to right). */
+.gt-month-marking .gt-month-dot:nth-child(1) { background: var(--gut-fg-1); }
+.gt-month-marking .gt-month-dot:nth-child(2) { background: var(--gut-fg-2); }
+.gt-month-marking .gt-month-dot:nth-child(3) { background: var(--gut-surface-alt); }
+
+/* Stacking + overlap. Leftmost on top so the lightest colour sits in front. */
+.gt-month-marking--2 .gt-month-dot:nth-child(1) { margin-right: -4px; z-index: 2; }
+.gt-month-marking--2 .gt-month-dot:nth-child(2) { z-index: 1; }
+.gt-month-marking--3 .gt-month-dot:nth-child(1) { margin-right: -6px; z-index: 3; }
+.gt-month-marking--3 .gt-month-dot:nth-child(2) { margin-right: -6px; z-index: 2; }
+.gt-month-marking--3 .gt-month-dot:nth-child(3) { z-index: 1; }
+
+/* =========================================================================
+   Interaction states — hover (desktop) + active (touch + desktop)
+   Hover wrapped in `@media (hover: hover)` so the state doesn't get stuck
+   on touch devices after a tap.
+   ========================================================================= */
+
+/* Smooth state changes for every interactive surface. */
+.gt-icon-btn,
+.gt-day-month-toggle,
+.gt-day-nav__btn,
+.gt-choice,
+.gt-bristol-num,
+.gt-month-day,
+.gt-slot--empty,
+.gt-input,
+.gt-textarea,
+.gt-fab,
+.gt-primary-btn,
+.gt-activity:not(.gt-activity--placeholder) {
+  transition: background-color 120ms ease, border-color 120ms ease,
+              filter 120ms ease, transform 120ms ease;
+}
+
+@media (hover: hover) {
+  /* Transparent surfaces → 10% white tint on hover. */
+  .gt-icon-btn:hover,
+  .gt-day-month-toggle:hover,
+  .gt-day-nav__btn:not([disabled]):hover,
+  .gt-choice:hover,
+  .gt-bristol-num:hover,
+  .gt-month-day:hover,
+  .gt-slot--empty:hover {
+    background: var(--gut-surface);
+  }
+
+  /* Filled surfaces (white pills, FAB, primary) → subtle darken on hover. */
+  .gt-fab:hover,
+  .gt-primary-btn:hover,
+  .gt-activity:not(.gt-activity--placeholder):hover {
+    filter: brightness(0.92);
+  }
+
+  /* Inputs → lift the border to hint interactivity. Don't override the
+     focused 2px border. */
+  .gt-input:hover:not(:focus),
+  .gt-textarea:hover:not(:focus) {
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+}
+
+/* Press states (touch + desktop). Override earlier :active rules so the
+   press feedback is consistently stronger than hover. */
+.gt-icon-btn:active,
+.gt-day-month-toggle:active,
+.gt-day-nav__btn:not([disabled]):active,
+.gt-choice:active,
+.gt-bristol-num:active,
+.gt-month-day:active,
+.gt-slot--empty:active {
+  background: var(--gut-divider);
+}
+
+.gt-activity:not(.gt-activity--placeholder):active {
+  filter: brightness(0.85);
+  transform: scale(0.98);
+}
+
+/* FAB / primary already nudge downward on :active — pair that with
+   a darker brightness so the press reads clearly. */
+.gt-fab:active,
+.gt-primary-btn:active {
+  filter: brightness(0.88);
+}
