@@ -7,9 +7,11 @@
   <title>Ventri Nota</title>
 
   <link rel="manifest" href="./manifest.webmanifest" />
-  <!-- Icon links removed pending fresh icon assets. -->
-  <!-- <link rel="icon" href="./icons/icon-192.png" /> -->
-  <!-- <link rel="apple-touch-icon" href="./icons/icon-192.png" /> -->
+  <!-- Vector favicon first (sharp at any tab-icon size in modern browsers),
+       PNG fallback for older browsers, apple-touch-icon for iOS home-screen. -->
+  <link rel="icon" type="image/svg+xml" href="./icons/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="./icons/icon-192.png" />
 
   <!-- Fonts: DM Sans (variable), DM Mono, Material Symbols Outlined -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
