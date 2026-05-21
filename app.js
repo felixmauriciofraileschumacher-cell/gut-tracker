@@ -461,7 +461,7 @@ function renderHeader() {
     type: "button",
     "aria-label": "Switch to month view",
   }, [
-    icon("calendar_today", "icon-24"),
+    icon("calendar_today", "icon-32"),
     el("span", { class: "gt-day-month-toggle__label" }, formatMonth(state.currentDate)),
   ]);
   toggle.addEventListener("click", openMonthView);
@@ -644,7 +644,7 @@ function renderMonthHeader() {
     type: "button",
     "aria-label": "Switch to day view for today",
   }, [
-    icon("calendar_view_day", "icon-24"),
+    icon("calendar_view_day", "icon-32"),
     el("span", { class: "gt-day-month-toggle__label" }, "Today"),
   ]);
   toggle.addEventListener("click", openDayViewAtToday);
