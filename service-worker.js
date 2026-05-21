@@ -1,5 +1,5 @@
 /* Ventri Nota service worker — shell + Google Fonts cache. */
-const VERSION = "v29";
+const VERSION = "v30";
 const CORE_CACHE = "gut-tracker-core-" + VERSION;
 const FONT_CACHE = "gut-tracker-fonts-" + VERSION;
 
@@ -9,12 +9,6 @@ const CORE_ASSETS = [
   "./styles.css",
   "./app.js",
   "./manifest.webmanifest",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png",
-  "./icons/icon-1024.png",
-  "./icons/icon-192-maskable.png",
-  "./icons/icon-512-maskable.png",
-  "./icons/icon-1024-maskable.png",
 ];
 
 self.addEventListener("install", (event) => {
