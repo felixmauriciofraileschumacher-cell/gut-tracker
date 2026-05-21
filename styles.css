@@ -257,7 +257,7 @@ button {
 /* Empty slots are rendered as buttons (see app.js). Match the activity
    pill radius so the hover tint reads as "this is where a pill would go". */
 .gt-slot--empty {
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
@@ -265,13 +265,13 @@ button {
   flex: 1 1 0;
   min-width: 0;
   height: 24px;
-  padding: 0 2px;
+  padding: 0 8px;
   display: flex;
   align-items: center;
   gap: 4px;
   background: var(--gut-fg-1);
   color: var(--gut-bg-1);
-  border-radius: 4px;
+  border-radius: 8px;
   font-family: var(--gut-sans);
   font-weight: 400;
   font-size: 14px;

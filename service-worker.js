@@ -1,5 +1,5 @@
 /* Ventri Nota service worker — shell + Google Fonts cache. */
-const VERSION = "v22";
+const VERSION = "v23";
 const CORE_CACHE = "gut-tracker-core-" + VERSION;
 const FONT_CACHE = "gut-tracker-fonts-" + VERSION;
 
