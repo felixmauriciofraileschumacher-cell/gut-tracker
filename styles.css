@@ -3,13 +3,12 @@
    ========================================================================= */
 :root {
   /* Color tokens (from Figma) */
-  --gut-fg-1: #f0f0f0;
+  --gut-fg-1: #f2f2f2;
   --gut-fg-2: #93a39e;
   --gut-divider: rgba(255, 255, 255, 0.2);
   --gut-surface: rgba(255, 255, 255, 0.1);
-  --gut-surface-alt: #47665c;
-  --gut-bg-1: #21332d;
-  --gut-disabled: #2d4039;
+  --gut-surface-alt: #4e6662;
+  --gut-bg-1: #2f3d3b;
 
   /* Typography */
   --gut-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
