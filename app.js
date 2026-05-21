@@ -1,7 +1,7 @@
 "use strict";
 
 /* =========================================================================
-   Gut Tracker — single-page app entry
+   Ventri Nota — single-page app entry
    Year scope: 2026 only.
    ========================================================================= */
 

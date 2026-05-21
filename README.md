@@ -1,4 +1,4 @@
-# Gut Tracker
+# Ventri Nota
 
 A personal PWA for tracking stool and urine activity. Scope: **2026 only**
 (Jan 1 – Dec 31, 2026). Data lives in the phone's browser `localStorage` —

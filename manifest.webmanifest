@@ -1,6 +1,6 @@
 {
-  "name": "Gut Tracker",
-  "short_name": "Gut Tracker",
+  "name": "Ventri Nota",
+  "short_name": "Ventri Nota",
   "description": "A personal gut and urine activity tracker.",
   "start_url": "./",
   "scope": "./",
